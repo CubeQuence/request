@@ -7,8 +7,6 @@ namespace CQ\Request;
 use CQ\Request\Exceptions\BadResponseException;
 use CQ\Request\Exceptions\ConnectException;
 use GuzzleHttp\Client;
-
-// TODO: wrap in my own exception
 use GuzzleHttp\Exception\BadResponseException as GuzzleBadResponseException;
 use GuzzleHttp\Exception\ConnectException as GuzzleConnectException;
 
@@ -47,12 +45,8 @@ final class Request
             );
         }
 
-        $output = $response->getBody()->getContents();
-
         // Handle NoContent responses
-        if (! $output) {
-            return (object) [];
-        }
+        $output = $response->getBody()->getContents() ?: (object) [];
 
         // If output can't be decoded just return output
         return json_decode($output) ?: $output;
