@@ -45,11 +45,13 @@ final class Request
             );
         }
 
-        // Handle NoContent responses
-        $output = $response->getBody()->getContents() ?: (object) [];
+        // Response with content
+        if ($output = $response->getBody()->getContents()) {
+            return json_decode($output);
+        }
 
-        // If output can't be decoded just return output
-        return json_decode($output) ?: $output;
+        // Response without content
+        return (object) [];
     }
 
     /**
